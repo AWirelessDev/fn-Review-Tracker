@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "fn_Review_Tracker": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7171",
+      "launchBrowser": false
+    }
+  }
+}

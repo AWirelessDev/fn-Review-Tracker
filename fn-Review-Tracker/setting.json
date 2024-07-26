@@ -1,0 +1,26 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "ServiceNow:UserName": "",
+    "ServiceNow:Password": "",
+    "CustomerServiceCase:ExternalAPIUrl": "",
+    "CustomerServiceCase:PrivateKeyString": "",
+    "CustomerServiceTicket:Description": "",
+    "CustomerServiceTicket:ShortDescription": "",
+    "CustomerServiceTicket:location": "",
+    "CustomerServiceTicket:Priority": "",
+    "CustomerServiceTicket:Category": "",
+    "CustomerServiceTicket:SubCategory": "",
+    "CustomerServiceTicket:comments": "",
+    "CustomerServiceTicket:IssueReasonCode": "",
+    "CustomerServiceTicket:Assignment_group": "",
+    "CustomerServiceTicket:Assign_To": "",
+    "CustomerServiceTicket:Contact_type": "",
+    "CustomerServiceTicket:ServiceNowTicketCreation": true
+  },
+  "ConnectionStrings": {
+    "ConnectionString": ""
+  }
+}
