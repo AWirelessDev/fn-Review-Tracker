@@ -29,6 +29,7 @@ namespace fn_Review_Tracker.Helper {
         }
 
         public async Task<ReviewTrackerResponse> ProcessReviewTracker(DateTime date) {
+            ReviewTrackerResponse reviewTrackerResponse=new ReviewTrackerResponse();
             DataTable returnData = new DataTable();
             List<ServiceNowTicketModel> createdTickets = new List<ServiceNowTicketModel>();
             try {             
@@ -72,16 +73,18 @@ namespace fn_Review_Tracker.Helper {
             }
             catch (Exception ex) {
                 _logger.LogError($"Error occured {ex.Message}");
-                return new ReviewTrackerResponse() { ErrorMessage = ex.Message, StatusCode = HttpStatusCode.BadRequest, Success = false };
+                reviewTrackerResponse = new ReviewTrackerResponse { ErrorMessage = ex.Message, StatusCode = HttpStatusCode.BadRequest, Success = false };
             }
             finally {
                 if (createdTickets.Count > 0) {
                     // call db bulk saving
                     _edwData.SaveBulkTickets(createdTickets);
                     _logger.LogInformation($"{createdTickets.Count} Tickets created..");
+                    reviewTrackerResponse = new ReviewTrackerResponse { StatusCode = HttpStatusCode.OK, Success = true, SuccessMessage = $"{createdTickets.Count} Tickets created for Date: {date.ToShortDateString()}" };
+
                 }
             }
-            return new ReviewTrackerResponse() { Success = true, StatusCode = HttpStatusCode.OK };
+            return reviewTrackerResponse;
         }            
 
     }

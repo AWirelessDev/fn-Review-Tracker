@@ -19,7 +19,7 @@ namespace fn_Review_Tracker
         }
 
         [Function("ReviewTrackerFunction")]
-        public async Task<IActionResult> ReviewTracker([HttpTrigger(AuthorizationLevel.Function,  "post")] HttpRequest req)
+        public async Task<IActionResult> ReviewTracker([HttpTrigger(AuthorizationLevel.Function,  "get")] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger ReviewTrackerFunction processed a request.");
             ReviewTrackerResponse reviewTrackerResponse = new ReviewTrackerResponse();
@@ -43,8 +43,7 @@ namespace fn_Review_Tracker
             catch (Exception ex) {
                 ExceptionLogger.LogException(nameof(ReviewTrackerFunction), ex, _logger);
                 return new BadRequestObjectResult(ex.Message);
-            }
-           // return new OkObjectResult("Welcome to Azure Functions!");
+            }          
         }
     }
 }
