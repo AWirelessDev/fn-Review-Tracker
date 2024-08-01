@@ -29,6 +29,7 @@ namespace fn_Review_Tracker.Helper {
         }
 
         public async Task<ReviewTrackerResponse> ProcessReviewTracker(DateTime date) {
+            _logger.LogInformation($"Calling {nameof(ProcessReviewTracker)} parameter date={date}");
             ReviewTrackerResponse reviewTrackerResponse=new ReviewTrackerResponse();
             DataTable returnData = new DataTable();
             List<ServiceNowTicketModel> createdTickets = new List<ServiceNowTicketModel>();
@@ -36,6 +37,7 @@ namespace fn_Review_Tracker.Helper {
                 StringBuilder description = new StringBuilder();  
                 returnData = await _edwData.GetReviewTrackerDetails(date);
                 var serviceNowTemplate = _serviceNowHelper.GetCustomerServiceCaseTemplate();
+                _logger.LogInformation($"Return {returnData.Rows.Count} records from EDW DATAMART_SOCIAL_MEDIA database");
                 
                 foreach (DataRow item in returnData.Rows) {
                     description.Clear();

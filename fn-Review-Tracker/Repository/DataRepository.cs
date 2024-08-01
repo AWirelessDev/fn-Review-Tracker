@@ -52,46 +52,15 @@ namespace fn_Review_Tracker.Repository {
                 command.Parameters.Add(new SqlParameter("@Location", serviceNowTicket.Location));
                 command.Parameters.Add(new SqlParameter("@CreatedDate", serviceNowTicket.CreatedDate));
                 command.ExecuteNonQueryAsync();
-                return new ReviewTrackerResponse() { StatusCode = HttpStatusCode.OK, Success = true };
+                _logger.LogInformation($"{nameof(SaveSnowTicketDetails)} method executed successfully.");
+                return new ReviewTrackerResponse() { StatusCode = HttpStatusCode.OK, Success = true };                
             }
             catch (Exception ex) {
                 _logger.LogWarning(ex.Message);
                 return new ReviewTrackerResponse() { StatusCode = HttpStatusCode.BadRequest, Success = false, ErrorMessage = ex.Message };
             }
             finally { _sqlConnection.Close(); }
-        }
-
-        //public void SaveBulkTickets(List<ServiceNowTicketModel> createdTickets) {
-
-        //    if (_sqlConnection.State != ConnectionState.Open) {
-        //        _sqlConnection.Open();
-        //    }
-        //    using (var bulkCopy = new SqlBulkCopy(_sqlConnection)) {
-        //        bulkCopy.DestinationTableName = "ReviewTrackersSnowTickets";
-
-        //        // Create a DataTable from the list
-        //        var dataTable = new DataTable();
-        //        dataTable.Columns.Add("SysId", typeof(string));
-        //        dataTable.Columns.Add("ReviewId", typeof(string));
-        //        dataTable.Columns.Add("TicketNo", typeof(string));
-        //        dataTable.Columns.Add("Category", typeof(string));
-        //        dataTable.Columns.Add("SubCategory", typeof(string));
-        //        dataTable.Columns.Add("Description", typeof(string));
-        //        dataTable.Columns.Add("ShortDescription", typeof(string));
-        //        dataTable.Columns.Add("Priority", typeof(string));
-        //        dataTable.Columns.Add("Assignment_Group", typeof(string));
-        //        dataTable.Columns.Add("Assign_To", typeof(string));
-        //        dataTable.Columns.Add("IssueReasonCode", typeof(string));
-        //        dataTable.Columns.Add("CreatedDate", typeof(DateTime));
-        //        foreach (var ticket in createdTickets) {
-        //            dataTable.Rows.Add(ticket.SysId, ticket.ReviewId, ticket.TicketNo, ticket.Category, ticket.SubCategory, ticket.Description, 
-        //                ticket.ShortDescription,ticket.Priority, ticket.Assignment_Group,ticket.Assign_To, ticket.IssueReasonCode, ticket.CreatedDate);                   
-        //        }
-
-        //        bulkCopy.WriteToServer(dataTable);
-        //    }
-
-        //}
+        }       
 
         public void SaveBulkTickets(List<ServiceNowTicketModel> createdTickets) {
 
@@ -102,7 +71,7 @@ namespace fn_Review_Tracker.Repository {
             using (var transaction = _sqlConnection.BeginTransaction()) {
                 try {
                     using (var bulkCopy = new SqlBulkCopy(_sqlConnection, SqlBulkCopyOptions.Default, transaction)) {
-                        bulkCopy.BatchSize = 1000; // Adjust batch size as per your needs
+                        bulkCopy.BatchSize = 1000; 
                         bulkCopy.DestinationTableName = "ReviewTrackersSnowTickets";
 
                         var dataTable = new DataTable();
@@ -127,14 +96,15 @@ namespace fn_Review_Tracker.Repository {
 
                         // Write to server
                         bulkCopy.WriteToServer(dataTable);
-
                         // Commit transaction
                         transaction.Commit();
+                        _logger.LogInformation("Bulk Saving executed successfully..");
                     }
                 }
                 catch (Exception ex) {
                     // Handle exception
                     transaction.Rollback();
+                    _logger.LogError("Error occured in bulk saving method");
                     throw new Exception("Failed to save bulk tickets.", ex);
                 }
                 finally {
@@ -143,7 +113,6 @@ namespace fn_Review_Tracker.Repository {
             }
 
         }
-
 
     }
 }
